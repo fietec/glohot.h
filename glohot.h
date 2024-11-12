@@ -25,7 +25,7 @@ typedef struct{
 void Glohot_init(Glohot *glohot);
 void Glohot_add(Glohot *glohot, GlohotKey *key, UINT mods, UINT vk, GlohotCallback callback);
 int Glohot_register(Glohot *glohot);
-void Glohot_unregister(Glohot *glohot);
+void Glohot_unregister(Glohot *glohot, size_t count);
 void Glohot_listen(Glohot *glohot);
 
 #endif // _GLOHOT_H
