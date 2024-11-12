@@ -1,3 +1,4 @@
+#define GLOHOT_IMPLEMENTATION
 #include "glohot.h"
 
 void p(void)
@@ -23,9 +24,9 @@ int main(void)
 	GlohotKey key1;
 	GlohotKey key2;
 	GlohotKey key3;
-	Glohot_add(&glohot, &key1, 0x50, MOD_CONTROL, &p);
-	Glohot_add(&glohot, &key2, 0x4F, MOD_CONTROL | MOD_ALT, &o);
-	Glohot_add(&glohot, &key3, 0x76, MOD_CONTROL | MOD_ALT, &test);
+	Glohot_add(&glohot, &key1, MOD_CONTROL, 0x50, &p);
+	Glohot_add(&glohot, &key2, MOD_CONTROL | MOD_ALT, 0x4F, &o);
+	Glohot_add(&glohot, &key3, MOD_CONTROL | MOD_ALT, 0x76, &test);
 	
 	Glohot_register(&glohot);
 	Glohot_listen(&glohot);

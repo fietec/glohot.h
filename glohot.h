@@ -22,8 +22,16 @@ typedef struct{
 	size_t count;
 } Glohot;
 
+void Glohot_init(Glohot *glohot);
+void Glohot_add(Glohot *glohot, GlohotKey *key, UINT mods, UINT vk, GlohotCallback callback);
+int Glohot_register(Glohot *glohot);
+void Glohot_unregister(Glohot *glohot);
+void Glohot_listen(Glohot *glohot);
 
-void Glohot_add(Glohot *glohot, GlohotKey *gk, UINT vk, UINT mods, GlohotCallback callback)
+#endif // _GLOHOT_H
+
+#ifdef GLOHOT_IMPLEMENTATION
+void Glohot_add(Glohot *glohot, GlohotKey *gk, UINT mods, UINT vk, GlohotCallback callback)
 {	
 	assert(glohot != NULL && gk != NULL);
 	gk->id = glohot->count; // this method is very primative but it will serve for the present
@@ -91,4 +99,4 @@ void Glohot_listen(Glohot *glohot)
 	}
 }
 
-#endif // _GLOHOT_H
+#endif // GLOHOT_IMPLEMENTATION
