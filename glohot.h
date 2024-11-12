@@ -1,9 +1,9 @@
 #ifndef _GLOHOT_H
 #define _GLOHOT_H
 
-#include <windows.h>
-#include <stdint.h>
+#include <stdio.h>
 #include <assert.h>
+#include <windows.h>
 
 #define GLOHOT_MAX_KEYS 32
 #define GLOHOT_ALL 0
@@ -23,13 +23,14 @@ typedef struct{
 } Glohot;
 
 
-void Glohot_create_key(Glohot *glohot, GlohotKey *gk, UINT vk, UINT mods,void (*callback) (void))
+void Glohot_add(Glohot *glohot, GlohotKey *gk, UINT vk, UINT mods, GlohotCallback callback)
 {	
 	assert(glohot != NULL && gk != NULL);
-	gk->id = glohot->count++;
+	gk->id = glohot->count; // this method is very primative but it will serve for the present
 	gk->vk = vk;
 	gk->mods = mods;
 	gk->callback = callback;
+	glohot->keys[glohot->count++] = *gk;
 }
 
 void Glohot_init(Glohot *glohot)
@@ -55,6 +56,7 @@ int Glohot_register(Glohot *glohot)
 	assert(glohot != NULL);
 	for (size_t i=0; i<glohot->count; ++i){
 		GlohotKey key = glohot->keys[i];
+		printf("Trying to register {%d, %u, %u, %p}\n", key.id, key.vk, key.mods, key.callback);
 		if (RegisterHotKey(NULL, key.id, key.mods, key.vk) == 0){
 			fprintf(stderr, "[ERROR] Could not register hotkey %u!\n", key.id);
 			Glohot_unregister(glohot, i);
