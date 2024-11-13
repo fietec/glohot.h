@@ -84,7 +84,6 @@ GlohotCallback Glohot_get(Glohot *glohot, int id)
 	return NULL;
 }
 
-
 void Glohot_listen(Glohot *glohot)
 {
 	assert(glohot != NULL);
@@ -98,5 +97,4 @@ void Glohot_listen(Glohot *glohot)
 		}
 	}
 }
-
 #endif // GLOHOT_IMPLEMENTATION

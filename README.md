@@ -33,4 +33,4 @@ If you want to unregister all present hotkeys, provided `GLOHOT_ALL`.
 ## Further remarks
 
 This very simplistic project is in a early state and relies on some **very** naive assumptions. For example, hotkey ids are not checked before being asigned, which may backfire when trying to register all added hotkeys.
-Therefore, please use this project with caution. You are invited to modify, rewrite and publish the source code and create push requests. For more detailed information about copyright read the `LICENSE` file.
+Therefore, please use this project with caution. You are invited to modify, rewrite and publish the source code and create push requests. For more detailed information about copyright see the `LICENSE` file.
