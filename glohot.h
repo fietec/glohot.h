@@ -33,7 +33,7 @@ void Glohot_listen(Glohot *glohot);
 #ifdef GLOHOT_IMPLEMENTATION
 void Glohot_add(Glohot *glohot, GlohotKey *gk, UINT mods, UINT vk, GlohotCallback callback)
 {	
-	assert(glohot != NULL && gk != NULL);
+	assert(glohot != NULL && gk != NULL && glohot->count < GLOHOT_MAX_KEYS);
 	gk->id = glohot->count; // this method is very primative but it will serve for the present
 	gk->vk = vk;
 	gk->mods = mods;
