@@ -7,12 +7,17 @@
 #include <stdint.h>
 
 #define GLOHOT_MAX_KEYS 32
-#define GLOHOT_ALL 0
-#define GLOHOT_RUNNING 1
+#define GLOHOT_ALL -1
+
+// flags
+#define GLOHOT_FLAG_DEFAULT  0x0
+#define GLOHOT_FLAG_RUNNING  0x1
+#define GLOHOT_FLAG_NO_UNREG 0x2
 
 #ifndef GLOHOT_SILENT
 	#define glohot_print(msg, ...) (printf((msg), ##__VA_ARGS__))
 #else
+	// only error messages
 	#define glohot_print(msg, ...) 
 #endif
 typedef void (*GlohotCallback) (void*);
@@ -27,33 +32,35 @@ typedef struct{
 typedef struct{
 	GlohotKey keys[GLOHOT_MAX_KEYS];
 	size_t count;
+	int id_base;
 	uint8_t status;
 } Glohot;
 
-void Glohot_init(Glohot *glohot);
+Glohot Glohot_create(int id_base, uint8_t flags); // create new Glohot with id_base and flags
 void Glohot_add(Glohot *glohot, GlohotKey *key, UINT mods, UINT vk, GlohotCallback callback);
-int Glohot_register(Glohot *glohot);
-void Glohot_unregister(Glohot *glohot, size_t count);
-void Glohot_listen(Glohot *glohot);
-void Glohot_PrintLastError();
+int Glohot_register(Glohot *glohot); // register all added hotkeys, returns 0 on success
+void Glohot_unregister(Glohot *glohot, size_t count); // unregiser n-hotkeys of the given Glohot
+void Glohot_listen(Glohot *glohot); // runs the mein listener loop, exit via Ctrl-C or Gloht_exit()
+void Glohot_exit(Glohot *glohot); // terminates the running listener loop of the given Glohot
+void Glohot_PrintLastError(); // just a helper function, prints the last win-api error
 
 #endif // _GLOHOT_H
 
 #ifdef GLOHOT_IMPLEMENTATION
+
+Glohot Glohot_create(int id_base, uint8_t flags)
+{
+	return (Glohot) {{0}, 0, id_base, flags};	
+}
+
 void Glohot_add(Glohot *glohot, GlohotKey *gk, UINT mods, UINT vk, GlohotCallback callback)
 {	
 	assert(glohot != NULL && gk != NULL && glohot->count < GLOHOT_MAX_KEYS);
-	gk->id = glohot->count; // this method is very primative but it will serve for the present
+	gk->id = glohot->id_base + glohot->count; // this method is very primative but it will serve for the present
 	gk->vk = vk;
 	gk->mods = mods;
 	gk->callback = callback;
 	glohot->keys[glohot->count++] = *gk;
-}
-
-void Glohot_init(Glohot *glohot)
-{
-	assert(glohot != NULL);
-	memset(glohot, 0, sizeof(Glohot));
 }
 
 void Glohot_unregister(Glohot *glohot, size_t count)
@@ -97,7 +104,7 @@ GlohotCallback Glohot_get(Glohot *glohot, int id)
 void Glohot_exit(Glohot *glohot)
 {
 	if (glohot == NULL) return;
-	glohot->status &= ~GLOHOT_RUNNING;
+	glohot->status &= ~GLOHOT_FLAG_RUNNING;
 }
 
 void Glohot_listen(Glohot *glohot)
@@ -105,14 +112,17 @@ void Glohot_listen(Glohot *glohot)
 	glohot_print("Listening..\n");
 	assert(glohot != NULL);
 	MSG msg = {0};
-	glohot->status |= GLOHOT_RUNNING;
-	while ((glohot->status & GLOHOT_RUNNING) != 0 && GetMessage(&msg, NULL, 0, 0) != 0){
+	glohot->status |= GLOHOT_FLAG_RUNNING;
+	while ((glohot->status & GLOHOT_FLAG_RUNNING) != 0 && GetMessage(&msg, NULL, 0, 0) != 0){
 		if (msg.message == WM_HOTKEY){
 			GlohotCallback callback = Glohot_get(glohot, msg.wParam);
 			if (callback != NULL){
 				callback(glohot);
 			}
 		}
+	}
+	if ((glohot->status & GLOHOT_FLAG_NO_UNREG) == 0){
+		Glohot_unregister(glohot, GLOHOT_ALL);
 	}
 	glohot_print("Exiting..\n");
 }
