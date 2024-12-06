@@ -4,11 +4,18 @@
 #include <stdio.h>
 #include <assert.h>
 #include <windows.h>
+#include <stdint.h>
 
 #define GLOHOT_MAX_KEYS 32
 #define GLOHOT_ALL 0
+#define GLOHOT_RUNNING 1
 
-typedef void (*GlohotCallback) (void);
+#ifndef GLOHOT_SILENT
+	#define glohot_print(msg, ...) (printf((msg), ##__VA_ARGS__))
+#else
+	#define glohot_print(msg, ...) 
+#endif
+typedef void (*GlohotCallback) (void*);
 
 typedef struct{
 	int id;
@@ -20,6 +27,7 @@ typedef struct{
 typedef struct{
 	GlohotKey keys[GLOHOT_MAX_KEYS];
 	size_t count;
+	uint8_t status;
 } Glohot;
 
 void Glohot_init(Glohot *glohot);
@@ -27,6 +35,7 @@ void Glohot_add(Glohot *glohot, GlohotKey *key, UINT mods, UINT vk, GlohotCallba
 int Glohot_register(Glohot *glohot);
 void Glohot_unregister(Glohot *glohot, size_t count);
 void Glohot_listen(Glohot *glohot);
+void Glohot_PrintLastError();
 
 #endif // _GLOHOT_H
 
@@ -64,9 +73,10 @@ int Glohot_register(Glohot *glohot)
 	assert(glohot != NULL);
 	for (size_t i=0; i<glohot->count; ++i){
 		GlohotKey key = glohot->keys[i];
-		printf("Trying to register {%d, %u, %u, %p}\n", key.id, key.vk, key.mods, key.callback);
+		glohot_print("Registering hotkey: {Id:%d, Vk:%u, Mods:%u}\n", key.id, key.vk, key.mods, key.callback);
 		if (RegisterHotKey(NULL, key.id, key.mods, key.vk) == 0){
-			fprintf(stderr, "[ERROR] Could not register hotkey %u!\n", key.id);
+			fprintf(stderr, "[ERROR] Could not register hotkey %u: ", key.id);
+			Glohot_PrintLastError();
 			Glohot_unregister(glohot, i);
 			return 1;
 		}
@@ -84,17 +94,45 @@ GlohotCallback Glohot_get(Glohot *glohot, int id)
 	return NULL;
 }
 
+void Glohot_exit(Glohot *glohot)
+{
+	if (glohot == NULL) return;
+	glohot->status &= ~GLOHOT_RUNNING;
+}
+
 void Glohot_listen(Glohot *glohot)
 {
+	glohot_print("Listening..\n");
 	assert(glohot != NULL);
 	MSG msg = {0};
-	while (GetMessage(&msg, NULL, 0, 0) != 0){
+	glohot->status |= GLOHOT_RUNNING;
+	while ((glohot->status & GLOHOT_RUNNING) != 0 && GetMessage(&msg, NULL, 0, 0) != 0){
 		if (msg.message == WM_HOTKEY){
 			GlohotCallback callback = Glohot_get(glohot, msg.wParam);
 			if (callback != NULL){
-				callback();
+				callback(glohot);
 			}
 		}
 	}
+	glohot_print("Exiting..\n");
+}
+
+void Glohot_PrintLastError() 
+{ 
+    LPVOID lpMsgBuf;
+    DWORD dw = GetLastError(); 
+
+    FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+        FORMAT_MESSAGE_FROM_SYSTEM |
+        FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        dw,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        (LPTSTR) &lpMsgBuf,
+        0, NULL );
+	printf(lpMsgBuf);
+	putchar('\n');
+    LocalFree(lpMsgBuf);
 }
 #endif // GLOHOT_IMPLEMENTATION
