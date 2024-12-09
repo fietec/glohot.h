@@ -38,7 +38,7 @@ typedef struct{
 
 Glohot Glohot_create(int id_base, uint8_t flags); // create new Glohot with id_base and flags
 void Glohot_add(Glohot *glohot, GlohotKey *key, UINT mods, UINT vk, GlohotCallback callback);
-int Glohot_register(Glohot *glohot); // register all added hotkeys, returns 0 on success
+int  Glohot_register(Glohot *glohot); // register all added hotkeys, returns 0 on success
 void Glohot_unregister(Glohot *glohot, size_t count); // unregiser n-hotkeys of the given Glohot
 void Glohot_listen(Glohot *glohot); // runs the mein listener loop, exit via Ctrl-C or Gloht_exit()
 void Glohot_exit(Glohot *glohot); // terminates the running listener loop of the given Glohot
