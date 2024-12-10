@@ -34,6 +34,8 @@ If you want to unregister hotkeys, use `Glohot_unregister(Glohot *glohot, size_t
 The `count` field indicates the amount of hotkeys to unregister starting with index 0.
 If you want to unregister all present hotkeys, provided `GLOHOT_ALL`.
 
+To disable non-error console output from **Glohot**, define `GLOHOT_SILENT`.
+
 ### Glohot Utils
 The additional header file `glohot_utils.h` contains further definitions and functions for working with global hotkeys.
 #### Key Codes
