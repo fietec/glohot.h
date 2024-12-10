@@ -37,7 +37,7 @@ If you want to unregister all present hotkeys, provided `GLOHOT_ALL`.
 ### Glohot Utils
 The additional header file `glohot_utils.h` contains further definitions and functions for working with global hotkeys.
 #### Key Codes
-To access vk code and mod defintions define `GLOHOT_KEY_CODES`.
+To access vk code and mod definitions define `GLOHOT_KEY_CODES`.
 #### Helper Functions
 To access helper functions like `emulate_key_press` define `GLOHOT_UTILS`.
 

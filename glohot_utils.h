@@ -1,6 +1,5 @@
 #ifndef _GLOHOT_UTILS_H
 #define _GLOHOT_UTILS_H
-#include <windows.h>
 
 #ifdef GLOHOT_KEY_CODES
 
@@ -162,12 +161,14 @@
 #define GH_VK_OEM_3         0xC0
 #define GH_VK_OEM_4         0xDB
 #define GH_VK_OEM_5         0xDC
-#define GH_VK_OEM_6         0xDD	
+#define GH_VK_OEM_6         0xDD
 #define GH_VK_OEM_7         0xDE
 #define GH_VK_OEM_CLEAR     0xFE
 
 #endif // GLOHOT_VK_CODES
 #ifdef GLOHOT_UTILS
+#include <windows.h>
+
 void emulate_key_press(UINT vk)
 {
     INPUT inputs[2] = {};
