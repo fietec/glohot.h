@@ -150,6 +150,26 @@
 // Lock keys
 #define GH_VK_NUMLOCK       0x90
 #define GH_VK_SCROLL        0x91
+#define GH_VK_LSHIFT 	    0xA0
+#define GH_VK_RSHIFT 	    0xA1 	
+#define GH_VK_LCONTROL 	    0xA2 	
+#define GH_VK_RCONTROL 	    0xA3 	
+#define GH_VK_LMENU 	    0xA4 	
+#define GH_VK_RMENU 	    0xA5 	
+#define GH_VK_BROWSER_BACK 	0xA6 	
+#define GH_VK_BROWSER_FWD 	0xA7 	
+#define GH_VK_BROWSER_RFRS	0xA8 	
+#define GH_VK_BROWSER_STOP 	0xA9 	
+#define GH_VK_BROWSER_SRCH  0xAA 	
+#define GH_VK_BROWSER_FAVS 	0xAB 	
+#define GH_VK_BROWSER_HOME 	0xAC 	
+#define GH_VK_VOLUME_MUTE 	0xAD 
+#define GH_VK_VOLUME_DOWN 	0xAE 	
+#define GH_VK_VOLUME_UP 	0xAF 	
+#define GH_VK_MEDIA_NEXT 	0xB0 	
+#define GH_VK_MEDIA_PREV 	0xB1 	
+#define GH_VK_MEDIA_STOP 	0xB2 	
+#define GH_VK_MEDIA_PLAY 	0xB3
 
 // OEM and Misc keys
 #define GH_VK_OEM_1         0xBA
