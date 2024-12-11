@@ -29,10 +29,22 @@ As you can see, to initiate a glohot struct, use the Glohot_create(int, uint8_t)
 Parameters:
 - id_base[int] : the id offset to start with
 - flags[uint8_t] : behaviour flags
+	- GLOHOT_FLAG_DEFAULT: the default behaviour
+	- GLOHOT_FLAG_NO_UNREG: disable un-registering of all hotkeys after exiting 
+
+A callback function has to be of type `GlohotCallback`, as defined in
+```c 
+typedef void (*GlohotCallback) (Glohot*);
+```
+When the assoiciated hotkey is pressed, **Glohot** will call the respective callback function and provide the corresponding **Glohot** instance via the argument.
+
+To gracefully exit `Glohot_listen`, call the `Glohot_exit(Glohot *glohot)` function.
+This can be done from a different thread or from a callback funtion of an assigned hotkey.
 
 If you want to unregister hotkeys, use `Glohot_unregister(Glohot *glohot, size_t count)`.
 The `count` field indicates the amount of hotkeys to unregister starting with index 0.
 If you want to unregister all present hotkeys, provided `GLOHOT_ALL`.
+
 
 To disable non-error console output from **Glohot**, define `GLOHOT_SILENT`.
 

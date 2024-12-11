@@ -20,7 +20,7 @@
 	// only error messages
 	#define glohot_print(msg, ...) 
 #endif
-typedef void (*GlohotCallback) (void*);
+typedef void (*GlohotCallback) (Glohot*);
 
 typedef struct{
 	int id;
