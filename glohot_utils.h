@@ -2,7 +2,12 @@
 #define _GLOHOT_UTILS_H
 
 #ifdef GLOHOT_KEY_CODES
+/* 
+	These defintions are mostly renamed versions of the vk codes found in winuser.h.
+	Further codes as e.g. for digits and alphabetical characters have been added for consitency.
+*/
 
+// Key modifiers
 #define GH_MOD_CTRL         0x01
 #define GH_MOD_ALT          0x02
 
@@ -169,7 +174,7 @@
 #define GH_VK_MEDIA_NEXT 	0xB0 	
 #define GH_VK_MEDIA_PREV 	0xB1 	
 #define GH_VK_MEDIA_STOP 	0xB2 	
-#define GH_VK_MEDIA_PLAY 	0xB3
+#define GH_VK_MEDIA_PLAY 	0xB3 // originally VK_MEDIA_PLAY_PAUSE, shortened for consistency
 
 // OEM and Misc keys
 #define GH_VK_OEM_1         0xBA
@@ -187,8 +192,13 @@
 
 #endif // GLOHOT_VK_CODES
 #ifdef GLOHOT_UTILS
+/*
+	Some functions for working with hotkeys on Windows. 
+	These are not per se related to `glohot` itself, but are often used together, which is why I decided to provide them here. 
+*/
 #include <windows.h>
 
+// emulate a key press, useful when trying to achieve behaviour of keys not present on some keyboards, e.g. GH_VK_MEDIA_PLAY, etc. 
 void emulate_key_press(UINT vk)
 {
     INPUT inputs[2] = {};
