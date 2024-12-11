@@ -20,6 +20,8 @@
 	// only error messages
 	#define glohot_print(msg, ...) 
 #endif
+
+typedef struct Glohot Glohot;
 typedef void (*GlohotCallback) (Glohot*);
 
 typedef struct{
@@ -27,14 +29,14 @@ typedef struct{
 	UINT vk;
 	UINT mods;
 	GlohotCallback callback;
-}GlohotKey;
-
-typedef struct{
+} GlohotKey;
+struct Glohot{
 	GlohotKey keys[GLOHOT_MAX_KEYS];
 	size_t count;
 	int id_base;
 	uint8_t status;
-} Glohot;
+};
+
 
 Glohot Glohot_create(int id_base, uint8_t flags); // create new Glohot with id_base and flags
 void Glohot_add(Glohot *glohot, GlohotKey *key, UINT mods, UINT vk, GlohotCallback callback);
