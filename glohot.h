@@ -30,6 +30,7 @@ typedef struct{
 	UINT mods;
 	GlohotCallback callback;
 } GlohotKey;
+
 struct Glohot{
 	GlohotKey keys[GLOHOT_MAX_KEYS];
 	size_t count;
@@ -37,9 +38,8 @@ struct Glohot{
 	uint8_t status;
 };
 
-
 Glohot Glohot_create(int id_base, uint8_t flags); // create new Glohot with id_base and flags
-void Glohot_add(Glohot *glohot, GlohotKey *key, UINT mods, UINT vk, GlohotCallback callback);
+void Glohot_add(Glohot *glohot, UINT mods, UINT vk, GlohotCallback callback);
 int  Glohot_register(Glohot *glohot); // register all added hotkeys, returns 0 on success
 void Glohot_unregister(Glohot *glohot, size_t count); // unregiser n-hotkeys of the given Glohot
 void Glohot_listen(Glohot *glohot); // runs the mein listener loop, exit via Ctrl-C or Gloht_exit()
@@ -55,14 +55,15 @@ Glohot Glohot_create(int id_base, uint8_t flags)
 	return (Glohot) {{0}, 0, id_base, flags};	
 }
 
-void Glohot_add(Glohot *glohot, GlohotKey *gk, UINT mods, UINT vk, GlohotCallback callback)
+void Glohot_add(Glohot *glohot, UINT mods, UINT vk, GlohotCallback callback)
 {	
-	assert(glohot != NULL && gk != NULL && glohot->count < GLOHOT_MAX_KEYS);
-	gk->id = glohot->id_base + glohot->count; // this method is very primative but it will serve for the present
-	gk->vk = vk;
-	gk->mods = mods;
-	gk->callback = callback;
-	glohot->keys[glohot->count++] = *gk;
+	assert(glohot != NULL && glohot->count < GLOHOT_MAX_KEYS);
+	GlohotKey gk;
+	gk.id = glohot->id_base + glohot->count; // this method is very primative but it will serve for the present
+	gk.vk = vk;
+	gk.mods = mods;
+	gk.callback = callback;
+	glohot->keys[glohot->count++] = gk;
 }
 
 void Glohot_unregister(Glohot *glohot, size_t count)
@@ -82,7 +83,7 @@ int Glohot_register(Glohot *glohot)
 	assert(glohot != NULL);
 	for (size_t i=0; i<glohot->count; ++i){
 		GlohotKey key = glohot->keys[i];
-		glohot_print("Registering hotkey: {Id:%d, Vk:%u, Mods:%u}\n", key.id, key.vk, key.mods, key.callback);
+		glohot_print("Registering hotkey: {Id:%d, Vk:%u, Mods:%u}\n", key.id, key.vk, key.mods);
 		if (RegisterHotKey(NULL, key.id, key.mods, key.vk) == 0){
 			fprintf(stderr, "[ERROR] Could not register hotkey %u: ", key.id);
 			Glohot_PrintLastError();
@@ -111,8 +112,8 @@ void Glohot_exit(Glohot *glohot)
 
 void Glohot_listen(Glohot *glohot)
 {
-	glohot_print("Listening..\n");
 	assert(glohot != NULL);
+	glohot_print("Listening..\n");
 	MSG msg = {0};
 	glohot->status |= GLOHOT_FLAG_RUNNING;
 	while ((glohot->status & GLOHOT_FLAG_RUNNING) != 0 && GetMessage(&msg, NULL, 0, 0) != 0){

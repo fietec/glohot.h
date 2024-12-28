@@ -15,11 +15,8 @@ After including the library, you can easily create custom global hotkeys like th
 ```c 
 Glohot glohot = Glohot_create(0, GLOHOT_FLAG_DEFAULT);   // initialize Glohot
 
-GlohotKey key1;  // declare hotkey structs
-GlohotKey key2;
-
-Glohot_add(&glohot, &key1, GH_MOD_CTRL, GH_VK_P, &some_callback1);  // populate hotkeys and add them to Glohot
-Glohot_add(&glohot, &key2, GH_MOD_CTRL | CH_MOD_ALT, GH_VK_O, &some_callback2);  // provide vk code and modifiers of the key and the callback function
+Glohot_add(&glohot, GH_MOD_CTRL, GH_VK_P, &some_callback1);  // add hotkeys to Glohot
+Glohot_add(&glohot, GH_MOD_CTRL | CH_MOD_ALT, GH_VK_O, &some_callback2);  // provide vk code and modifiers of the key and the callback function
 
 Glohot_register(&glohot);  // register all hotkeys added to Glohot
 Glohot_listen(&glohot);  // listen for key presses
