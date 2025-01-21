@@ -1,8 +1,7 @@
 #include <stdio.h>
 #define GLOHOT_IMPLEMENTATION
-#include "glohot.h"
 #define GLOHOT_KEY_CODES
-#include "glohot_utils.h"
+#include "glohot.h"
 
 void test(Glohot *glohot)
 {

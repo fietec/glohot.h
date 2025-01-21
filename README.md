@@ -45,11 +45,9 @@ If you want to unregister all present hotkeys, provided `GLOHOT_ALL`.
 
 To disable non-error console output from **Glohot**, define `GLOHOT_SILENT`.
 
-### Glohot Utils
-The additional header file `glohot_utils.h` contains further definitions and functions for working with global hotkeys.
-#### Key Codes
+### Key Codes
 To access vk code and mod definitions define `GLOHOT_KEY_CODES`.
-#### Helper Functions
+### Helper utils
 To access helper functions like `emulate_key_press` define `GLOHOT_UTILS`.
 
 
