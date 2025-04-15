@@ -22,12 +22,13 @@ Glohot_register(&glohot);  // register all hotkeys added to Glohot
 Glohot_listen(&glohot);  // listen for key presses
 ```
 
-As you can see, to initiate a glohot struct, use the Glohot_create(int, uint8_t) function:
+As you can see, to initiate a glohot struct, use the `Glohot_create(int, uint8_t)` function:
+
 Parameters:
-- id_base[int] : the id offset to start with
-- flags[uint8_t] : behaviour flags
-	- GLOHOT_FLAG_DEFAULT: the default behaviour
-	- GLOHOT_FLAG_NO_UNREG: disable un-registering of all hotkeys after exiting 
+- `id_base`[int] : the id offset to start with
+- `flags`[uint8_t] : behaviour flags
+	- `GLOHOT_FLAG_DEFAULT`: the default behaviour
+	- `GLOHOT_FLAG_NO_UNREG`: disable un-registering of all hotkeys after exiting 
 
 A callback function has to be of type `GlohotCallback`, as defined in
 ```c 
@@ -49,9 +50,3 @@ To disable non-error console output from **Glohot**, define `GLOHOT_SILENT`.
 To access vk code and mod definitions define `GLOHOT_KEY_CODES`.
 ### Helper utils
 To access helper functions like `emulate_key_press` define `GLOHOT_UTILS`.
-
-
-## Further remarks
-
-This very simplistic project is in a early state and relies on some quite naive assumptions.
-Therefore, please use this project with caution. You are invited to modify, rewrite and publish the source code and create push requests. For more detailed information about copyright see the `LICENSE` file.

@@ -350,13 +350,26 @@ void emulate_key_press(UINT vk)
 {
     INPUT inputs[2] = {};
     ZeroMemory(inputs, sizeof(inputs));
+    if (vk == 0x01 || vk == 0x02 || vk == 0x04 || vk == 0x05) {
+        // Handle mouse button events
+        inputs[0].type = INPUT_MOUSE;
+        inputs[0].mi.dwFlags = (vk == 0x01) ? MOUSEEVENTF_LEFTDOWN :
+                               (vk == 0x02) ? MOUSEEVENTF_RIGHTDOWN :
+                               (vk == 0x04) ? MOUSEEVENTF_MIDDLEDOWN : 0;
+        
+        inputs[1].type = INPUT_MOUSE;
+        inputs[1].mi.dwFlags = (vk == 0x01) ? MOUSEEVENTF_LEFTUP :
+                               (vk == 0x02) ? MOUSEEVENTF_RIGHTUP :
+                               (vk == 0x04) ? MOUSEEVENTF_MIDDLEUP : 0;
 
-    inputs[0].type = INPUT_KEYBOARD;
-    inputs[0].ki.wVk = vk;
+    }else {
+        inputs[0].type = INPUT_KEYBOARD;
+        inputs[0].ki.wVk = vk;
 
-    inputs[1].type = INPUT_KEYBOARD;
-    inputs[1].ki.wVk = vk;
-    inputs[1].ki.dwFlags = KEYEVENTF_KEYUP;
+        inputs[1].type = INPUT_KEYBOARD;
+        inputs[1].ki.wVk = vk;
+        inputs[1].ki.dwFlags = KEYEVENTF_KEYUP;
+    }
 
     UINT uSent = SendInput(2, inputs, sizeof(INPUT));
 }
